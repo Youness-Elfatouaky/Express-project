@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7cb342;      /* Light green */
+            --primary-light: #aed581; /* Lighter green */
+            --primary-lighter: #c5e1a5; /* Very light green */
+            --primary-dark: #558b2f;   /* Darker green */
+            --accent: #ffd54f;       /* Yellow accent */
+            --accent-light: #ffecb3;  /* Light yellow */
+            --light: #f1f8e9;        /* Very light green background */
+            --dark: #33691e;         /* Dark green for text */
+            --danger: #ff8a65;       /* Orange-red for errors */
+            --success: #8bc34a;      /* Success green */
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--light) 100%);
+            min-height: 100vh;
+            font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding-top: 50px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .confirmation-card {
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(124, 179, 66, 0.15);
+            border-radius: 20px;
+            overflow: hidden;
+            border: none;
+            position: relative;
+            border-left: 6px solid var(--accent);
+        }
+        
+        .confirmation-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--accent-light) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            opacity: 0.6;
+            z-index: 0;
+        }
+        
+        .card-header {
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-dark), var(--accent), var(--primary-dark));
+            opacity: 0.7;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.9;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .card-body {
+            padding: 2rem;
+            background-color: white;
+        }
+        
+        .btn-return {
+            border-radius: 10px;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            border: none;
+            color: white;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-return::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
+        }
+        
+        .btn-return:hover {
+            background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(124, 179, 66, 0.3);
+        }
+        
+        .btn-return:hover::before {
+            left: 100%;
+        }
+        
+        .btn-return:active {
+            transform: translateY(0);
+        }
+        
+        .user-name {
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        
+        .email-icon {
+            color: var(--accent);
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .alert-success {
+            background-color: var(--light);
+            border-color: var(--primary-lighter);
+            color: var(--dark);
+            border-radius: 10px;
+        }
+        
+        .email-notification {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-footer {
+            background-color: var(--light);
+            color: var(--dark);
+            border-top: 1px solid var(--primary-lighter);
+        }
+        
+        /* Animation classes */
+        .animate-fadeIn {
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .animate-slideInUp {
+            animation: slideInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Ajout d'une légère texture de fond */
+        .bg-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%237cb342' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .support-link {
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .support-link:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="bg-texture">
+    <div class="container">
+        <div class="confirmation-card card animate__animated animate__fadeIn">
+            <div class="card-header">
+                <i class="bi bi-check-circle-fill success-icon animate__animated animate__bounceIn"></i>
+                <h1 class="h3 animate__animated animate__fadeInDown">Inscription réussie!</h1>
+            </div>
+            <div class="card-body text-center">
+                <div class="alert alert-success mb-4 animate-slideInUp" role="alert">
+                    <p class="mb-0">Merci <span class="user-name"><%= nom %></span> pour votre inscription.</p>
+                </div>
+                
+                <div class="email-notification mb-4 animate-slideInUp" style="animation-delay: 0.2s;">
+                    <i class="bi bi-envelope-fill email-icon"></i>
+                    <p class="mb-0">Un email de confirmation a été envoyé à votre adresse.</p>
+                </div>
+                
+                <div class="mt-4 animate-slideInUp" style="animation-delay: 0.4s;">
+                    <a href="/inscription" class="btn btn-return">
+                        <i class="bi bi-arrow-left me-2"></i>Retour au formulaire
+                    </a>
+                </div>
+            </div>
+            <div class="card-footer text-center py-3 animate-fadeIn" style="animation-delay: 0.6s;">
+                <small>Vous recevrez des instructions supplémentaires par email</small>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4 animate-fadeIn" style="animation-delay: 0.8s;">
+            <p class="text-muted">
+                <small>En cas de problème, contactez le <a href="mailto:support@example.com" class="support-link">support</a></small>
+            </p>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Apply animation classes after DOM is loaded
+            const animateSlideElements = document.querySelectorAll('.animate-slideInUp');
+            animateSlideElements.forEach((el, index) => {
+                el.classList.add('animate__animated', 'animate__fadeInUp');
+                el.style.animationDelay = (0.2 * index) + 's';
+            });
+            
+            const animateFadeElements = document.querySelectorAll('.animate-fadeIn');
+            animateFadeElements.forEach((el, index) => {
+                el.classList.add('animate__animated', 'animate__fadeIn');
+                el.style.animationDelay = (0.2 * index) + 's';
+            });
+        });
+    </script>
+</body>
+</html>

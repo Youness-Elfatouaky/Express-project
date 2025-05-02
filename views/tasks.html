@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Tâches</title>
+    
+    
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+    
+        body {
+            background: linear-gradient(135deg, #e0f7df, #ffffcc);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            color: #2e7d32;
+        }
+    
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+    
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    
+        .app-logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #43a047;
+            margin-bottom: 10px;
+        }
+    
+        header p {
+            font-size: 1.2rem;
+            color: #558b2f;
+        }
+    
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 8px rgba(67, 160, 71, 0.2);
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            transition: transform 0.3s;
+        }
+    
+        .card:hover {
+            transform: translateY(-5px);
+        }
+    
+        h2 {
+            margin-bottom: 20px;
+            color: #33691e;
+        }
+    
+        .form-group {
+            margin-bottom: 20px;
+        }
+    
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+    
+        input[type="text"] {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #c5e1a5;
+            border-radius: 8px;
+            background-color: #f1f8e9;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+    
+        input[type="text"]:focus {
+            border-color: #aed581;
+            outline: none;
+        }
+    
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    
+        .custom-checkbox {
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+            user-select: none;
+            font-weight: 500;
+        }
+    
+        .custom-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+    
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #f1f8e9;
+            border: 2px solid #c5e1a5;
+            border-radius: 4px;
+        }
+    
+        .custom-checkbox input:checked ~ .checkmark {
+            background-color: #a5d6a7;
+            border-color: #81c784;
+        }
+    
+        button[type="submit"], .empty-state button {
+            background: linear-gradient(90deg, #43a047, #aed581);
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+    
+        button[type="submit"]:hover, .empty-state button:hover {
+            background: linear-gradient(90deg, #33691e, #9ccc65);
+        }
+    
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 20px;
+        }
+    
+        .task-card {
+            background: #f9fbe7;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(155, 197, 61, 0.2);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+    
+        .task-card:hover {
+            transform: translateY(-5px);
+        }
+    
+        .task-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+    
+        .task-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+    
+        .status-pending {
+            color: #f9a825;
+        }
+    
+        .status-completed {
+            color: #43a047;
+        }
+    
+        .task-actions {
+            margin-top: auto;
+            display: flex;
+            gap: 10px;
+        }
+    
+        .btn-edit, .btn-delete {
+            background-color: #ffffff;
+            border: 2px solid #c5e1a5;
+            padding: 8px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+    
+        .btn-edit:hover {
+            background-color: #aed581;
+            border-color: #81c784;
+        }
+    
+        .btn-delete:hover {
+            background-color: #f9a825;
+            border-color: #fbc02d;
+            color: #fff;
+        }
+    
+        .btn-icon {
+            width: 18px;
+            height: 18px;
+        }
+    
+        .completed {
+            background: #e8f5e9;
+        }
+    
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background: #fffde7;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(255, 235, 59, 0.2);
+        }
+    
+        .empty-state img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+    
+        .empty-state h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            color: #f9a825;
+        }
+    
+        .empty-state p {
+            margin-bottom: 20px;
+            color: #f57f17;
+        }
+    </style>
+    
+    
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="app-logo">Tasks Manager</div>
+            <p>Organisez votre travail et votre vie avec simplicité et efficacité</p>
+        </header>
+
+        <section class="card">
+            <h2>Créer une nouvelle tâche</h2>
+            <form id="addTaskForm">
+                <div class="form-group">
+                    <label for="title">Titre de la tâche</label>
+                    <input type="text" id="title" name="title" placeholder="Qu'avez-vous besoin de faire?" required>
+                </div>
+                <div class="checkbox-wrapper">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="completed" name="completed">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label for="completed">Marquer comme terminée</label>
+                </div>
+                <button type="submit">
+                    <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Ajouter la tâche
+                </button>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2>Mes tâches</h2>
+            <div class="tasks-grid" id="tasksContainer">
+                <!-- Tâche en attente -->
+                
+                
+                <!-- État vide (à afficher quand il n'y a pas de tâches) -->
+                
+                
+                    <!-- <img src="/api/placeholder/200/150" alt="Aucune tâche"> -->
+                    <h3>Pas encore de tâches</h3>
+                    <p>Commencez par ajouter votre première tâche ci-dessus</p>
+                    
+                
+               
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // JavaScript pour gérer les tâches
+        document.addEventListener('DOMContentLoaded', function() {
+            const addTaskForm = document.getElementById('addTaskForm');
+            const tasksContainer = document.getElementById('tasksContainer');
+            
+            // Charger les tâches au démarrage
+            fetchTasks();
+            
+            // Gérer l'ajout d'une nouvelle tâche
+            addTaskForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('title').value;
+                const completed = document.getElementById('completed').checked;
+                
+                fetch('/tasks', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ title, completed })
+                })
+                .then(response => response.json())
+                .then(newTask => {
+                    addTaskForm.reset();
+                    fetchTasks();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Afficher un message d'erreur à l'utilisateur
+                });
+            });
+            
+            // Fonction pour récupérer toutes les tâches
+            function fetchTasks() {
+                fetch('/tasks')
+                    .then(response => response.json())
+                    .then(tasks => {
+                        if (tasks.length === 0) {
+                            // Afficher l'état vide si aucune tâche
+                            tasksContainer.innerHTML = `
+                                <div class="empty-state">
+                                    <img src="/api/placeholder/200/150" alt="Aucune tâche">
+                                    <h3>Pas encore de tâches</h3>
+                                    <p>Commencez par ajouter votre première tâche ci-dessus</p>
+                                    <button onclick="document.getElementById('title').focus()">
+                                        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                        Créer une tâche
+                                    </button>
+                                </div>
+                            `;
+                        } else {
+                            tasksContainer.innerHTML = '';
+                            tasks.forEach(task => {
+                                renderTask(task);
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+            
+            // Fonction pour afficher une tâche
+            function renderTask(task) {
+                const taskElement = document.createElement('div');
+                taskElement.className = `task-card ${task.completed ? 'completed' : ''}`;
+                taskElement.innerHTML = `
+                    <h3>${task.title}</h3>
+                    <span class="task-status ${task.completed ? 'status-completed' : 'status-pending'}">
+                        ${task.completed ? 
+                        '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Terminée' : 
+                        '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> En attente'}
+                    </span>
+                    <div class="task-actions">
+                        <button class="btn-edit btn-sm" onclick="editTask(${task.id})">
+                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                            Modifier
+                        </button>
+                        <button class="btn-delete btn-sm" onclick="deleteTask(${task.id})">
+                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                            Supprimer
+                        </button>
+                    </div>
+                `;
+                tasksContainer.appendChild(taskElement);
+            }
+            
+            // Fonctions globales pour les boutons
+            window.editTask = function(id) {
+                const newTitle = prompt('Entrez le nouveau titre:');
+                if (newTitle) {
+                    fetch(`/tasks/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ title: newTitle })
+                    })
+                    .then(() => fetchTasks())
+                    .catch(error => console.error('Error:', error));
+                }
+            };
+            
+            window.toggleStatus = function(id, currentStatus) {
+                fetch(`/tasks/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ completed: !currentStatus })
+                })
+                .then(() => fetchTasks())
+                .catch(error => console.error('Error:', error));
+            };
+            
+            window.deleteTask = function(id) {
+                if (confirm('Êtes-vous sûr de vouloir supprimer cette tâche?')) {
+                    fetch(`/tasks/${id}`, {
+                        method: 'DELETE'
+                    })
+                    .then(() => fetchTasks())
+                    .catch(error => console.error('Error:', error));
+                }
+            };
+        });
+    </script>
+</body>
+</html>

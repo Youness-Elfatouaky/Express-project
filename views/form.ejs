@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #7cb342;      /* Light green */
+            --primary-light: #aed581; /* Lighter green */
+            --primary-lighter: #c5e1a5; /* Very light green */
+            --primary-dark: #558b2f;   /* Darker green */
+            --accent: #ffd54f;       /* Yellow accent */
+            --accent-light: #ffecb3;  /* Light yellow */
+            --light: #f1f8e9;        /* Very light green background */
+            --dark: #33691e;         /* Dark green for text */
+            --danger: #ff8a65;       /* Orange-red for errors */
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--light) 100%);
+            min-height: 100vh;
+            font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        .form-container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(124, 179, 66, 0.15);
+            transition: all 0.3s ease;
+            border-left: 6px solid var(--accent);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--accent-light) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            opacity: 0.6;
+            z-index: 0;
+        }
+        
+        .form-container:hover {
+            box-shadow: 0 15px 35px rgba(124, 179, 66, 0.25);
+        }
+        
+        .form-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, var(--accent), var(--primary-light));
+            border-radius: 3px;
+        }
+        
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(124, 179, 66, 0.25);
+            background-color: white;
+        }
+        
+        .form-label {
+            color: var(--dark);
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .btn-submit {
+            padding: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            border: none;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
+        }
+        
+        .btn-submit:hover {
+            background: linear-gradient(45deg, var(--primary-dark), var(--accent));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(124, 179, 66, 0.3);
+        }
+        
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+        
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        
+        .error-message {
+            animation: fadeIn 0.5s ease-in-out;
+            color: var(--danger);
+            font-size: 0.85rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Animation personnalisée pour les champs du formulaire */
+        .form-animate {
+            opacity: 0;
+            animation: fadeInUp 0.8s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Délais d'animation pour chaque champ */
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .btn-submit { animation-delay: 0.5s; }
+        
+        /* Effet scintillant au focus */
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 213, 79, 0.25);
+        }
+        
+        /* Ajout d'une légère texture de fond */
+        .bg-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%237cb342' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .form-container .header-accent {
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        /* Input icon styling */
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            opacity: 0.6;
+        }
+        
+        .form-control:focus + .input-icon {
+            opacity: 1;
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body class="d-flex align-items-center bg-texture">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="form-container p-4 p-md-5 animate__animated animate__fadeIn">
+                    <div class="header-accent"></div>
+                    <h2 class="form-title animate__animated animate__fadeInDown">Créer un compte</h2>
+                    
+                    <form action="/inscription" method="POST">
+                        <div class="form-group mb-4 form-animate">
+                            <label for="nom" class="form-label">Nom complet</label>
+                            <div class="input-with-icon">
+                                <input type="text" class="form-control" id="nom" name="nom" value="<%= formData.nom || '' %>" placeholder="Entrez votre nom complet">
+                                <i class="bi bi-person input-icon"></i>
+                            </div>
+                            <% if (errors.nom) { %>
+                                <div class="error-message mt-2 animate__animated animate__headShake">
+                                    <i class="bi bi-exclamation-circle-fill"></i> <%= errors.nom %>
+                                </div>
+                            <% } %>
+                        </div>
+                        
+                        <div class="form-group mb-4 form-animate">
+                            <label for="email" class="form-label">Adresse email</label>
+                            <div class="input-with-icon">
+                                <input type="email" class="form-control" id="email" name="email" value="<%= formData.email || '' %>" placeholder="exemple@email.com">
+                                <i class="bi bi-envelope input-icon"></i>
+                            </div>
+                            <% if (errors.email) { %>
+                                <div class="error-message mt-2 animate__animated animate__headShake">
+                                    <i class="bi bi-exclamation-circle-fill"></i> <%= errors.email %>
+                                </div>
+                            <% } %>
+                        </div>
+                        
+                        <div class="form-group mb-4 form-animate">
+                            <label for="password" class="form-label">Mot de passe</label>
+                            <div class="input-with-icon">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="••••••••">
+                                <i class="bi bi-lock input-icon"></i>
+                            </div>
+                            <% if (errors && errors.password) { %>
+                                <div class="error-message mt-2 animate__animated animate__headShake">
+                                    <i class="bi bi-exclamation-circle-fill"></i> <%= errors.password %>
+                                </div>
+                            <% } %>
+                        </div>
+                        
+                        <div class="form-group mb-4 form-animate">
+                            <label for="confirmPassword" class="form-label">Confirmer le mot de passe</label>
+                            <div class="input-with-icon">
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="••••••••">
+                                <i class="bi bi-shield-lock input-icon"></i>
+                            </div>
+                            <% if (errors && errors.confirmPassword) { %>
+                                <div class="error-message mt-2 animate__animated animate__headShake">
+                                    <i class="bi bi-exclamation-circle-fill"></i> <%= errors.confirmPassword %>
+                                </div>
+                            <% } %>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-submit w-100 form-animate">
+                            <i class="bi bi-person-plus me-2"></i> S'inscrire
+                        </button>
+                        
+                        <div class="text-center mt-4 form-animate" style="animation-delay: 0.6s;">
+                            <p class="text-muted">Déjà membre? <a href="#" style="color: var(--primary-dark); text-decoration: none; font-weight: 500;">Connectez-vous</a></p>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        // Animation supplémentaire au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ajoute la classe animate__animated aux éléments avec form-animate
+            const formAnimateElements = document.querySelectorAll('.form-animate');
+            formAnimateElements.forEach(el => {
+                el.classList.add('animate__animated', 'animate__fadeInUp');
+            });
+            
+            // Animation pour les messages d'erreur
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => {
+                msg.classList.add('animate__animated', 'animate__headShake');
+            });
+            
+            // Animation subtile lors du focus sur les champs
+            const formInputs = document.querySelectorAll('.form-control');
+            formInputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('animate__animated', 'animate__pulse');
+                    this.parentElement.style.animationDuration = '0.3s';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('animate__animated', 'animate__pulse');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

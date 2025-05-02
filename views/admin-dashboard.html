@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord administrateur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Reset and basics */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f7f0;
+    color: #333;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+/* Dashboard layout */
+.dashboard {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: linear-gradient(135deg, #6fcf97, #f2c94c);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem 1rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.logo-icon {
+    background-color: #fff;
+    color: #6fcf97;
+    font-weight: bold;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav {
+    flex-grow: 1;
+}
+
+.nav-item {
+    margin-bottom: 1rem;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    background: #fff;
+    color: #6fcf97;
+    font-weight: bold;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-info {
+    text-align: left;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.user-role {
+    font-size: 0.8rem;
+}
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3a4d39;
+}
+
+.search-bar {
+    background: #e8f5e9;
+    display: flex;
+    align-items: center;
+    border-radius: 30px;
+    padding: 0.4rem 1rem;
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    margin-left: 8px;
+}
+
+/* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.stat-title {
+    font-size: 1rem;
+    color: #888;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0.5rem 0;
+    color: #27ae60;
+}
+
+.stat-change {
+    font-size: 0.9rem;
+}
+
+.stat-change.up {
+    color: #27ae60;
+}
+
+.stat-change.down {
+    color: #e67e22;
+}
+
+/* Content Cards */
+.content-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    color: #3a4d39;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.3s;
+}
+
+.btn-primary {
+    background: #6fcf97;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #5bb87b;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #6fcf97;
+    color: #6fcf97;
+}
+
+.btn-outline:hover {
+    background: #6fcf97;
+    color: #fff;
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+}
+
+/* Tables */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #f2c94c;
+    color: #333;
+}
+
+th, td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+tbody tr:hover {
+    background: #f9f9f9;
+}
+
+/* Loading */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 2rem;
+    color: #999;
+}
+
+.spinner {
+    width: 30px;
+    height: 30px;
+    border: 4px solid #ccc;
+    border-top: 4px solid #6fcf97;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Tabs */
+.tab-content {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+</head>
+<body>
+
+    <!-- Modal pour ajouter/modifier -->
+<div id="crud-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modal-title">Titre</h2>
+        <form id="crud-form">
+            <input type="hidden" id="item-id">
+            <div id="form-fields">
+                <!-- Les champs seront injectés ici dynamiquement -->
+            </div>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+    </div>
+</div>
+
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+           
+            
+            <nav class="nav">
+                <div class="nav-item">
+                    <a href="#users" class="nav-link active" onclick="showTab('users')">
+                        Utilisateurs
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#products" class="nav-link" onclick="showTab('products')">
+                        Produits
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#orders" class="nav-link" onclick="showTab('orders')">
+                        Commandes
+                    </a>
+                </div>
+            </nav>
+            
+            
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1 class="page-title" id="current-tab-title">Utilisateurs</h1>
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Rechercher...">
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title">Utilisateurs</div>
+                    <div class="stat-value" id="users-count">0</div>
+                    <div class="stat-change up">↑ 12% ce mois</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Produits</div>
+                    <div class="stat-value" id="products-count">0</div>
+                    <div class="stat-change up">↑ 5% ce mois</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Commandes</div>
+                    <div class="stat-value" id="orders-count">0</div>
+                    <div class="stat-change down">↓ 2% ce mois</div>
+                </div>
+            </div>
+            
+            <!-- Users Tab -->
+            <div id="users-tab" class="tab-content">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Liste des utilisateurs</h2>
+                        <div class="card-actions">
+                            <button class="btn btn-outline">
+                                <span class="btn-icon">🔄</span> Rafraîchir
+                            </button>
+                            <button class="btn btn-primary" onclick="addItem('users')">
+                                <span class="btn-icon">+</span> Ajouter
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <div id="users-loading" class="loading">
+                            <div class="spinner"></div>
+                            <span>Chargement des utilisateurs...</span>
+                        </div>
+                        <table id="users-table" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Utilisateur</th>
+                                    <th>Email</th>
+                                    <th>Rôle</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <!-- Contenu généré dynamiquement -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Products Tab -->
+            <div id="products-tab" class="tab-content" style="display: none;">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Liste des produits</h2>
+                        <div class="card-actions">
+                            <button class="btn btn-outline">
+                                <span class="btn-icon">🔄</span> Rafraîchir
+                            </button>
+                            <button class="btn btn-primary" onclick="addItem('products')">
+                                <span class="btn-icon">+</span> Ajouter
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <div id="products-loading" class="loading">
+                            <div class="spinner"></div>
+                            <span>Chargement des produits...</span>
+                        </div>
+                        <table id="products-table" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Produit</th>
+                                    <th>Prix</th>
+                                    <th>Stock</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body">
+                                <!-- Contenu généré dynamiquement -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Orders Tab -->
+            <div id="orders-tab" class="tab-content" style="display: none;">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Liste des commandes</h2>
+                        <div class="card-actions">
+                            <button class="btn btn-outline">
+                                <span class="btn-icon">🔄</span> Rafraîchir
+                            </button>
+                            <button class="btn btn-primary" onclick="addItem('orders')">
+                                <span class="btn-icon">+</span> Ajouter
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <div id="orders-loading" class="loading">
+                            <div class="spinner"></div>
+                            <span>Chargement des commandes...</span>
+                        </div>
+                        <table id="orders-table" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body">
+                                <!-- Contenu généré dynamiquement -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Fonction pour afficher un onglet
+        function showTab(tabName) {
+            // Masquer tous les onglets
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Afficher l'onglet sélectionné
+            document.getElementById(`${tabName}-tab`).style.display = 'block';
+            
+            // Mettre à jour le titre de la page
+            document.getElementById('current-tab-title').textContent = 
+                tabName === 'users' ? 'Utilisateurs' : 
+                tabName === 'products' ? 'Produits' : 'Commandes';
+            
+            // Mettre à jour l'état actif dans la sidebar
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`.nav-link[href="#${tabName}"]`).classList.add('active');
+            
+            // Charger les données si nécessaire
+            if (tabName === 'users' && document.getElementById('users-table').style.display === 'none') {
+                loadUsers();
+            } else if (tabName === 'products' && document.getElementById('products-table').style.display === 'none') {
+                loadProducts();
+            } else if (tabName === 'orders' && document.getElementById('orders-table').style.display === 'none') {
+                loadOrders();
+            }
+        }
+        
+        // Fonction pour charger les utilisateurs
+        function loadUsers() {
+            fetch('/users')
+                .then(response => response.json())
+                .then(users => {
+                    const tableBody = document.getElementById('users-table-body');
+                    tableBody.innerHTML = '';
+                    
+                    users.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div class="avatar avatar-primary">${user.name.charAt(0)}</div>
+                                    <div>
+                                        <div style="font-weight: 500;">${user.name}</div>
+                                        <div style="font-size: 0.75rem; color: var(--gray);">ID: ${user.id}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>${user.email}</td>
+                            <td><span class="badge ${user.role === 'admin' ? 'badge-info' : 'badge-success'}">${user.role}</span></td>
+                            <td class="actions">
+<button class="btn btn-outline btn-sm" 
+        onclick="editItem('users', ${user.id})"
+        style="color: #3b82f6; border-color: #3b82f6; background-color: rgba(59, 130, 246, 0.1);">
+    <i class="fas fa-pencil-alt mr-1"></i> Modifier
+</button>
+                                <button class="btn btn-outline btn-sm" style="color: var(--danger); border-color: var(--danger);" onclick="deleteUser(${user.id})">Supprimer</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                    
+                    // Mettre à jour le compteur
+                    document.getElementById('users-count').textContent = users.length;
+                    
+                    document.getElementById('users-loading').style.display = 'none';
+                    document.getElementById('users-table').style.display = 'table';
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des utilisateurs:', error);
+                    document.getElementById('users-loading').innerHTML = 'Erreur lors du chargement des utilisateurs.';
+                });
+        }
+        
+        // Fonction pour charger les produits
+        function loadProducts() {
+            fetch('/products')
+                .then(response => response.json())
+                .then(products => {
+                    const tableBody = document.getElementById('products-table-body');
+                    tableBody.innerHTML = '';
+                    
+                    products.forEach(product => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${product.id}</td>
+                            <td>
+                                <div style="font-weight: 500;">${product.name}</div>
+                                <div style="font-size: 0.75rem; color: var(--gray);">SKU: ${product.sku || 'N/A'}</div>
+                            </td>
+                            <td>${product.price.toFixed(2)} DH</td>
+                            <td>${product.stock}</td>
+                            <td>
+                                <span class="badge ${product.stock > 10 ? 'badge-success' : product.stock > 0 ? 'badge-warning' : 'badge-danger'}">
+                                    ${product.stock > 10 ? 'Disponible' : product.stock > 0 ? 'Stock faible' : 'Rupture'}
+                                </span>
+                            </td>
+                            <td class="actions">
+                                <button class="btn btn-outline btn-sm" 
+        style="color: #3b82f6; border-color: #3b82f6; background-color: rgba(59, 130, 246, 0.1);"
+        onmouseover="this.style.backgroundColor='rgba(59, 130, 246, 0.2)'"
+        onmouseout="this.style.backgroundColor='rgba(59, 130, 246, 0.1)'"
+        onclick="editItem('products', ${product.id})">
+    <i class="fas fa-edit" style="margin-right: 5px;"></i> Modifier
+</button>
+            
+                                <button class="btn btn-outline btn-sm" style="color: var(--danger); border-color: var(--danger);" onclick="deleteProduct(${product.id})">Supprimer</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                    
+                    // Mettre à jour le compteur
+                    document.getElementById('products-count').textContent = products.length;
+                    
+                    document.getElementById('products-loading').style.display = 'none';
+                    document.getElementById('products-table').style.display = 'table';
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des produits:', error);
+                    document.getElementById('products-loading').innerHTML = 'Erreur lors du chargement des produits.';
+                });
+        }
+        
+        // Fonction pour charger les commandes// Dans votre fichier admin.html, modifiez la fonction loadOrders() comme suit :
+
+function loadOrders() {
+    // Afficher le loader
+    document.getElementById('orders-loading').style.display = 'flex';
+    document.getElementById('orders-table').style.display = 'none';
+
+    fetch('/orders')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur réseau');
+            }
+            return response.json();
+        })
+        .then(orders => {
+            const tableBody = document.getElementById('orders-table-body');
+            tableBody.innerHTML = '';
+
+            if (!orders || orders.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem;">
+                            Aucune commande trouvée
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            orders.forEach(order => {
+                // Formatage de la date
+                const orderDate = order.date ? new Date(order.date) : new Date();
+                const formattedDate = orderDate.toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+
+                // Détermination du statut
+                let statusClass = 'badge-info';
+                let statusText = order.status || 'inconnu';
+                
+                if (statusText.toLowerCase().includes('livré')) {
+                    statusClass = 'badge-success';
+                } else if (statusText.toLowerCase().includes('préparation')) {
+                    statusClass = 'badge-warning';
+                } else if (statusText.toLowerCase().includes('annulé')) {
+                    statusClass = 'badge-danger';
+                }
+
+                // Formatage du montant
+                const amount = order.total ? parseFloat(order.total).toFixed(2) + ' DH' : 'N/A';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>#${order.id || 'N/A'}</td>
+                    <td>
+                        <div style="font-weight: 500;">Client ${order.userId || 'N/A'}</div>
+                        <div style="font-size: 0.75rem; color: var(--gray);">ID: ${order.id || 'N/A'}</div>
+                    </td>
+                    <td>${formattedDate}</td>
+                    <td>${amount}</td>
+                    <td><span class="badge ${statusClass}">${statusText}</span></td>
+                    <td class="actions">
+                        <button class="btn btn-outline btn-sm" 
+        onclick="editItem('orders', ${order.id})"
+        style="color: #3b82f6; border-color: #3b82f6;">
+    Modifier
+</button>
+                        <button class="btn btn-outline btn-sm" style="color: var(--danger); border-color: var(--danger);" 
+                                onclick="deleteOrder(${order.id})">
+                            Supprimer
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Mettre à jour le compteur
+            document.getElementById('orders-count').textContent = orders.length;
+            
+            // Masquer le loader et afficher le tableau
+            document.getElementById('orders-loading').style.display = 'none';
+            document.getElementById('orders-table').style.display = 'table';
+        })
+        .catch(error => {
+            console.error('Erreur lors du chargement des commandes:', error);
+            document.getElementById('orders-loading').innerHTML = `
+                <div style="color: var(--danger);">
+                    Erreur lors du chargement des commandes: ${error.message}
+                </div>
+            `;
+        });
+}
+        
+        // Fonctions pour voir les détails
+        function viewUser(id) {
+            alert(`Voir les détails de l'utilisateur ID: ${id}`);
+            // Implémentation à compléter
+        }
+        
+        function viewProduct(id) {
+            alert(`Voir les détails du produit ID: ${id}`);
+            // Implémentation à compléter
+        }
+        
+        function viewOrder(id) {
+            alert(`Voir les détails de la commande ID: ${id}`);
+            // Implémentation à compléter
+        }
+        
+        // Fonctions pour supprimer
+        function deleteUser(id) {
+            if (confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur ID: ${id}?`)) {
+                fetch(`/users/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Utilisateur supprimé avec succès');
+                    loadUsers();
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la suppression de l\'utilisateur:', error);
+                    alert('Erreur lors de la suppression de l\'utilisateur');
+                });
+            }
+        }
+        
+        function deleteProduct(id) {
+            if (confirm(`Êtes-vous sûr de vouloir supprimer le produit ID: ${id}?`)) {
+                fetch(`/products/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Produit supprimé avec succès');
+                    loadProducts();
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la suppression du produit:', error);
+                    alert('Erreur lors de la suppression du produit');
+                });
+            }
+        }
+        
+        function deleteOrder(id) {
+            if (confirm(`Êtes-vous sûr de vouloir supprimer la commande ID: ${id}?`)) {
+                fetch(`/orders/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Commande supprimée avec succès');
+                    loadOrders();
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la suppression de la commande:', error);
+                    alert('Erreur lors de la suppression de la commande');
+                });
+            }
+        }
+        
+        // Charger les utilisateurs au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUsers();
+        });
+        const formConfigs = {
+    users: {
+        title: 'Utilisateur',
+        fields: [
+            { name: 'name', label: 'Nom', type: 'text', required: true },
+            { name: 'email', label: 'Email', type: 'email', required: true },
+            { name: 'role', label: 'Rôle', type: 'select', options: ['user', 'admin'], required: true }
+        ],
+        endpoint: '/users'
+    },
+    products: {
+        title: 'Produit',
+        fields: [
+            { name: 'name', label: 'Nom', type: 'text', required: true },
+            { name: 'price', label: 'Prix', type: 'number', step: '0.01', required: true },
+            { name: 'stock', label: 'Stock', type: 'number', required: true },
+            { name: 'sku', label: 'SKU', type: 'text' }
+        ],
+        endpoint: '/products'
+    },
+    orders: {
+        title: 'Commande',
+        fields: [
+            { name: 'userId', label: 'ID Utilisateur', type: 'number', required: true },
+            { name: 'productId', label: 'ID Produit', type: 'number', required: true },
+            { name: 'quantity', label: 'Quantité', type: 'number', required: true },
+            { name: 'status', label: 'Statut', type: 'select', 
+              options: ['En préparation', 'Expédié', 'Livré', 'Annulé'], required: true }
+        ],
+        endpoint: '/orders'
+    }
+};
+
+// Ouvrir le modal pour ajouter
+function addItem(type) {
+    document.getElementById('modal-title').textContent = `Ajouter un ${formConfigs[type].title}`;
+    document.getElementById('item-id').value = '';
+    renderForm(type);
+    openModal();
+}
+
+// Ouvrir le modal pour modifier
+function editItem(type, id) {
+    document.getElementById('modal-title').textContent = `Modifier ${formConfigs[type].title}`;
+    document.getElementById('item-id').value = id;
+    
+    fetch(`${formConfigs[type].endpoint}/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            renderForm(type, data);
+            openModal();
+        });
+}
+
+// Rendre le formulaire dynamiquement
+function renderForm(type, data = {}) {
+    const formFields = document.getElementById('form-fields');
+    formFields.innerHTML = '';
+    
+    formConfigs[type].fields.forEach(field => {
+        const div = document.createElement('div');
+        div.className = 'form-group';
+        
+        const label = document.createElement('label');
+        label.htmlFor = field.name;
+        label.textContent = field.label;
+        
+        let input;
+        
+        if (field.type === 'select') {
+            input = document.createElement('select');
+            input.id = field.name;
+            input.name = field.name;
+            input.required = field.required || false;
+            
+            field.options.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option;
+                opt.textContent = option;
+                input.appendChild(opt);
+            });
+        } else {
+            input = document.createElement('input');
+            input.type = field.type;
+            input.id = field.name;
+            input.name = field.name;
+            input.required = field.required || false;
+            
+            if (field.step) input.step = field.step;
+        }
+        
+        if (data[field.name]) input.value = data[field.name];
+        
+        div.appendChild(label);
+        div.appendChild(input);
+        formFields.appendChild(div);
+    });
+}
+
+// Gestion de la soumission du formulaire
+document.getElementById('crud-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const type = document.getElementById('modal-title').textContent.includes('Utilisateur') ? 'users' :
+                 document.getElementById('modal-title').textContent.includes('Produit') ? 'products' : 'orders';
+    
+    const itemId = document.getElementById('item-id').value;
+    const method = itemId ? 'PUT' : 'POST';
+    const url = itemId ? `${formConfigs[type].endpoint}/${itemId}` : formConfigs[type].endpoint;
+    
+    const data = {};
+    formConfigs[type].fields.forEach(field => {
+        data[field.name] = formData.get(field.name);
+    });
+    
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(() => {
+        closeModal();
+        alert(`Opération réussie!`);
+        if (type === 'users') loadUsers();
+        else if (type === 'products') loadProducts();
+        else loadOrders();
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        alert('Une erreur est survenue');
+    });
+});
+
+// Gestion du modal
+function openModal() {
+    document.getElementById('crud-modal').style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('crud-modal').style.display = 'none';
+    document.getElementById('crud-form').reset();
+}
+    </script>
+</body>
+</html>

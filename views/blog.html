@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog API Explorer</title>
+    <style>
+        :root {
+            --primary:  #10B981;
+            --secondary:#fbff04;
+            --accent: #9907d3;
+            --background: #F3F4F6;
+            --text-dark: #111827;
+            --text-light: #6B7280;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+    
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+        }
+    
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+    
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+    
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+    
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-light);
+        }
+    
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+    
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .card-accent {
+            border-top: 4px solid var(--accent);
+        }
+    
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+    
+        .card-icon {
+            margin-right: 0.75rem;
+            color: var(--primary);
+        }
+    
+        .card-title {
+            font-size: 1.5rem;
+        }
+    
+        .form-group {
+            margin-bottom: 1rem;
+        }
+    
+        .form-label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+    
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+    
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+    
+        .btn-primary:hover {
+            background-color: #4338CA;
+        }
+    
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+    
+        .btn-secondary:hover {
+            background-color: #059669;
+        }
+    
+        .btn-icon {
+            width: 1rem;
+            height: 1rem;
+        }
+    
+        .results-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    
+        .results-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+    
+        .results-content {
+            background: #F9FAFB;
+            border-radius: 8px;
+            padding: 1rem;
+            min-height: 150px;
+            position: relative;
+        }
+    
+        .results-placeholder {
+            text-align: center;
+            color: var(--text-light);
+        }
+    
+        .results-placeholder-icon {
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+    
+        pre {
+            background: #111827;
+            color: #D1D5DB;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+    
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150px;
+        }
+    
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--primary);
+            border-top: 4px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    
+        @keyframes spin {
+            0% { transform: rotate(0deg);}
+            100% { transform: rotate(360deg);}
+        }
+    
+        .copy-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+    
+        .copy-button:hover {
+            background: #4338CA;
+        }
+    
+        .error-container {
+            background-color: #FEE2E2;
+            color: #B91C1C;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+    
+        .error-header {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="app-container">
+        <header class="hero">
+            <h1 class="hero-title">Blogs</h1>
+            <p class="hero-subtitle">Explorez facilement les articles de votre blog par date ou par catégorie</p>
+        </header>
+
+        <div class="search-grid">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">Recherche par date</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="form-label" for="year">Année</label>
+                        <input class="form-control" type="number" id="year" value="2023" min="2000" max="2030">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="month">Mois (optionnel)</label>
+                        <input class="form-control" type="number" id="month" min="1" max="12" placeholder="Entrez un mois (1-12)">
+                    </div>
+                    <button class="btn btn-primary" onclick="getPostsByDate()">
+                        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Rechercher par date
+                    </button>
+                </div>
+            </div>
+
+            <div class="card card-accent">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">Recherche par catégorie</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="form-label" for="category">Nom de la catégorie</label>
+                        <input class="form-control" type="text" id="category" value="nodejs" placeholder="Ex: nodejs, api, database...">
+                    </div>
+                    <button class="btn btn-secondary" onclick="getPostsByCategory()">
+                        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Rechercher par catégorie
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <section class="results-section">
+            <div class="results-header">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                </svg>
+                Résultats de votre recherche
+            </div>
+            <div class="results-content" id="results">
+                <div class="results-placeholder">
+                    <div class="results-placeholder-icon">
+                        <svg width="60" height="60" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <p>Utilisez les formulaires ci-dessus pour afficher les résultats de votre recherche</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        async function getPostsByDate() {
+            const year = document.getElementById('year').value;
+            const month = document.getElementById('month').value;
+            
+            let url = `/blog/posts/${year}`;
+            if (month) url += `/${month}`;
+            
+            showLoading();
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.message || 'Une erreur est survenue lors de la récupération des données');
+                }
+                
+                displayResults(data);
+            } catch (error) {
+                displayError("Erreur de recherche", error.message);
+            }
+        }
+        
+        async function getPostsByCategory() {
+            const category = document.getElementById('category').value;
+            
+            if (!category.trim()) {
+                displayError("Erreur de validation", "Veuillez saisir une catégorie");
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                const response = await fetch(`/blog/categories/${category}/posts`);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.message || 'Une erreur est survenue lors de la récupération des données');
+                }
+                
+                displayResults(data);
+            } catch (error) {
+                displayError("Erreur de recherche", error.message);
+            }
+        }
+        
+        function showLoading() {
+            document.getElementById('results').innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            `;
+        }
+        
+        function displayResults(data) {
+            const resultsElement = document.getElementById('results');
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const postCount = Array.isArray(data) ? data.length : 'N/A';
+            
+            resultsElement.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--success);">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>Requête réussie (${postCount} résultat${postCount !== 1 ? 's' : ''})</span>
+                    </div>
+                    <div style="color: var(--text-light); font-size: 0.875rem;">${timestamp}</div>
+                </div>
+                <div style="position: relative;">
+                    <button class="copy-button" onclick="copyToClipboard()">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                        </svg>
+                        <span class="tooltip">Copier</span>
+                    </button>
+                    <pre id="json-result">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+        }
+        
+        function displayError(title, message) {
+            document.getElementById('results').innerHTML = `
+                <div class="error-container">
+                    <div class="error-header">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h3 class="error-title">${title}</h3>
+                    </div>
+                    <p class="error-message">${message}</p>
+                </div>
+                <div style="text-align: center; padding: 1.5rem 0;">
+                    <p style="color: var(--text-secondary); font-size: 0.875rem;">Veuillez modifier vos critères de recherche et réessayer</p>
+                </div>
+            `;
+        }
+        
+        function copyToClipboard() {
+            const jsonElement = document.getElementById('json-result');
+            if (!jsonElement) return;
+            
+            const text = jsonElement.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const tooltip = document.querySelector('.tooltip');
+                if (tooltip) {
+                    tooltip.textContent = 'Copié !';
+                    setTimeout(() => {
+                        tooltip.textContent = 'Copier';
+                    }, 2000);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
