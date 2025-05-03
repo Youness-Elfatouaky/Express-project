@@ -275,17 +275,7 @@ app.use('/upload', uploadRouter);
 // Route pour afficher la date
 
 app.listen(PORT, () => {
-    console.log(`Serveur démarré:
-    - Accueil: http://localhost:${PORT}
-    - Date: http://localhost:${PORT}/date
-    - API Tâches: http://localhost:${PORT}/tasks
-    - Interface Tâches: http://localhost:${PORT}/tasks-page
-    - Blog API: http://localhost:${PORT}/blog
-    - Interface Blog: http://localhost:${PORT}/blog-page
-    - Interface Admin: http://localhost:${PORT}/admin-dashboard
-                    http://localhost:${PORT}/inscription
-                    http://localhost:${PORT}/api/users
-                    `);
+    console.log(`Serveur démarré:http://localhost:${PORT}`);
                     
     
     // Créer un message de démarrage dans le log
