@@ -7,19 +7,16 @@ Créez un serveur ExpressJS qui répond "Hello World" sur la route principale et
  ``` bash command 
  node app.js
  ```
-### 👉 URL pour tester le projet : http://localhost:3000/
+### URL pour tester le projet : http://localhost:3000/
 
 # Serveur ExpressJS affichant "Welcome to Home Page"
-
 ![welcome](https://github.com/user-attachments/assets/2a14e51a-1ae8-4bd0-8393-33a0df9b10ce)
 
 
-
-# ✅ Description de l'affichage de la page /date :
+# Affichage de la date actuelle sur la route /date
 La page située à la route "/date" affiche la date et l'heure actuelles
 
-![express2](https://github.com/user-attachments/assets/551887e7-7c7a-4a02-b1e2-7f195e931b43)
-
+![date](https://github.com/user-attachments/assets/f8955b52-0267-4e18-a1a0-e0c8563333a0)
 
 
 
@@ -31,10 +28,11 @@ Créez un projet ExpressJS complet avec la structure de répertoires recommandé
  ``` bash command 
  node app.js
  ```
-### 👉 URL pour tester le projet : http://localhost:3000 
-# 📘 Création d’un projet ExpressJS structuré avec gestion des routes et fichiers statiques
+### URL de test : http://localhost:3000/users
+# Organisation du projet avec gestion des routes et fichiers statiques
 
-![image](https://github.com/user-attachments/assets/ff3144c4-ee2d-43d1-a8ea-20f53f63a790)
+![welcome user](https://github.com/user-attachments/assets/528e3cfd-2c94-4bcf-aa1b-02f998d8ee77)
+
 
 
 # II - Routage avec ExpressJS
@@ -52,126 +50,128 @@ PUT /tasks/:id - Mettre à jour une tâche existante
 
 DELETE /tasks/:id - Supprimer une tâche
 
- ### Démarrage et arrêt du serveur:
- ``` bash command 
- node app.js
- ```
-### 👉 URL pour tester le projet : http://localhost:3000/tasks-page
-# 🟣 Vue de la page de gestion des tâches
+### URL de test : http://localhost:3000/tasks-page
+# Affichage de l'interface de gestion des tâches
 
-![22222222222](https://github.com/user-attachments/assets/080b7cbc-5bec-4f24-82e7-4a4815ba778d)
+![tasks](https://github.com/user-attachments/assets/75e99039-e86e-4d83-b537-70a640f7d3b1)
 
-## 📝Exercice 2: Implémenter des routes paramétrées
+
+## Exercice 2: Implémenter des routes paramétrées
 Créez une API pour un blog avec des routes paramétrées :
 
 GET /posts/:year/:month? - Récupérer les articles d'une année et optionnellement d'un mois spécifique
 
 GET /categories/:categoryName/posts - Récupérer les articles d'une catégorie spécifique
 
-### 👉 URL pour tester le projet : http://localhost:3000/blog-page
+### URL de test : http://localhost:3000/blog-page
 
-### 🚀 Implémentation d'une API RESTful avec ExpressJS : Routes paramétrées pour un système de blog.
-Développement des endpoints GET /posts/:year/:month? et GET /categories/:categoryName/posts avec gestion des paramètres optionnels.
+### API RESTful avec routes paramétrées pour un blog
 
-![33333333333Immagine 2025-04-16 232430](https://github.com/user-attachments/assets/30d2262f-724c-4efb-9a33-85506b76e56c)
-
-### 🔍 Résultats de l'Exploration API
-
-Données récupérées via les routes paramétrées /posts/:year/:month? et /categories/:categoryName/posts
-
-![5555555555Immagine 2025-04-16 235024](https://github.com/user-attachments/assets/3288ca52-f5a9-4231-994f-dcbbd7a90593)
+![blogs](https://github.com/user-attachments/assets/6f8e4c2c-7d53-4eb9-b92f-d184a7f38a63)
 
 
 ## Exercice 3: Organiser une application avec des routeurs modulaires
 Réorganisez une application Express existante en utilisant des routeurs modulaires pour différentes ressources (utilisateurs, produits, commandes, etc.).
 
-### 👉 URL pour tester le projet : http://localhost:3000/admin-dashboard
+### URL de test : http://localhost:3000/admin-dashboard
 
-## 🛠️ Interface de gestion des utilisateurs - Routeur modulaire : /utilisateurs :
+## Interface de gestion des produits (routeur : /produits)
+![dashbord-produit](https://github.com/user-attachments/assets/670edb89-b4b4-4c63-867f-8594e774bfc7)
 
-![8888888Immagine 2025-04-17 000425](https://github.com/user-attachments/assets/f9f7b9b4-9790-484b-b077-508888707fd6)
 
-## 🛠️ Interface de gestion des produits - Routeur modulaire : /produits :
-![I09999999999mmagine 2025-04-17 000623](https://github.com/user-attachments/assets/25356182-bfda-4271-9198-009cbd61b8c9)
+## Interface de gestion des utilisateurs (routeur : /utilisateurs)
+![dashbord-users](https://github.com/user-attachments/assets/894e5ed1-b68e-454a-9e29-e8b3c6cdcbde)
 
-## 🛠️ Interface de gestion des commandes - Routeur modulaire : /commandes :
-![33333333333333333333Immagine 2025-04-17 000829](https://github.com/user-attachments/assets/f542f428-7bac-48af-ba60-d8e4de3da178)
+
+## Interface de gestion des commandes (routeur : /commandes)
+![dashbor-commandes](https://github.com/user-attachments/assets/578f9c16-1f53-4f89-b71c-71863fe462e7)
+
 
 
 # III - Les Middlewares dans ExpressJS
 ## Exercice 1: Créer un middleware de logging personnalisé 
 Créez un middleware qui enregistre les détails de chaque requête (méthode, URL, heure, adresse IP) dans un fichier de log.
 
-# GET
-![postamen 1png](https://github.com/user-attachments/assets/760f6702-de68-4fe9-9fc5-41ef294a7e75)
+# code
+![logger-code](https://github.com/user-attachments/assets/61e3956c-ff67-4756-832c-4cb2ff76afd8)
 
-# POST 
-![post5](https://github.com/user-attachments/assets/d2465aa4-4853-4bf2-93af-c7817cdb5770)
 
-![post](https://github.com/user-attachments/assets/4bc73094-bef3-4b3a-9202-7030e7c4f3a4)
+# logs 
+![logs](https://github.com/user-attachments/assets/cf1e4953-6fad-4d91-9307-f7cd7b9757c2)
+
 
 
 ## Exercice 2: Implémenter un middleware d'authentification simple
 Créez un middleware qui vérifie si une requête contient un token valide dans les en-têtes et refuse l'accès si ce n'est pas le cas.
-### Tester avec Postman
-#### Test 1: Obtenir un token (Login)
-## Méthode: POST
- ### 👉 URL: http://localhost:3000/login
-![yesss](https://github.com/user-attachments/assets/33cc3801-6d80-4b07-a520-133b5e9ccf6b)
+### Tester avec Thunder Client for VS Code
+![download](https://github.com/user-attachments/assets/72bbc295-7bd3-4f5d-aba6-bb6fbf1d0006)
+
+#### Étape 1 : Obtenir un token (Login)
+### Méthode : POST
+### URL : http://localhost:3000/login
+![Obtenir un token](https://github.com/user-attachments/assets/23ff7787-2406-4dc8-b6c3-20f36af38db6)
 
 
-### Test 2: Accéder à une route protégée avec le token:
+
+### Étape 2 : Accéder à une route protégée avec un token valide
 ### Méthode: GET
 ### 👉 URL: http://localhost:3000/protected 
- ![tokemnnnnnnn](https://github.com/user-attachments/assets/1e76cc47-e149-4c70-8e43-c35dfe4a06dc)
+ ![acces to protect route with token](https://github.com/user-attachments/assets/89aff08b-915e-4fb4-8497-f26efad75b5e)
 
 
- ### Test 3: Accéder à une route protégée sans token
+
+ ### Étape 3 : Accéder à une route protégée sans token
  ### Méthode: GET
  ### 👉 URL: http://localhost:3000/protected 
- ![sans token](https://github.com/user-attachments/assets/e2969ef3-ead2-495c-8d22-c8f758016f57)
+![acces to protect route with no token](https://github.com/user-attachments/assets/a26e63ac-65f1-4239-bc32-359628185ff8)
 
  
-###  Test d'une route protégée (avec token invalide) :
-![FF](https://github.com/user-attachments/assets/64442e1e-d098-4e16-9174-ff742049caf0)
+### Étape 4 : Utiliser un token invalide
+![invalid token test](https://github.com/user-attachments/assets/6fa961f0-515e-40c7-8a73-dfe45eed09df)
+
 
 # IV - Gestion des requêtes et réponses
 ## Exercice 1 : Créer un formulaire et traiter sa soumission avec ExpressJS
 Créez une application Express qui affiche un formulaire d'inscription et traite sa soumission. Le formulaire doit inclure des champs pour le nom, l'email et le mot de passe. Validez les données soumises et affichez un message de confirmation.
 
- ### 👉 URL: http://localhost:3000/inscription
- ## 🟢 Formulaire d’inscription avec ExpressJS
- ![mot depass3](https://github.com/user-attachments/assets/569efb1d-4bc1-4276-8061-dd38e02db511)
+ ### URL : http://localhost:3000/inscription
+ ## Formulaire d’inscription
+![signin page](https://github.com/user-attachments/assets/c35d263e-0530-4873-b497-a0e3c690e98e)
+
  
-## 🔴 La confirmation du mot de passe est incorrecte
- ![incooect](https://github.com/user-attachments/assets/c21873ad-b4ab-45a1-9d25-a4979afa7eb6)
+## Erreur de confirmation de mot de passe
+![signin password errro](https://github.com/user-attachments/assets/7326b433-3d0c-44a1-8f5b-83f9507542e9)
+
  
- ## ✅ la page de confirmation
- ![rihame](https://github.com/user-attachments/assets/e804b6ae-b3af-42c1-ba5a-946e51f52a7b)
+ ## Page de confirmation réussie
+![signin-confimation](https://github.com/user-attachments/assets/78a43aa2-7fda-47d8-ac4b-04c3f1e39126)
 
  ## Exercice 2 : Implémenter un système d'upload de fichiers
 Créez une application qui permet aux utilisateurs d'uploader des images. Limitez les types de fichiers acceptés aux images (JPEG, PNG, GIF) et la taille maximale à 5MB. Affichez les images uploadées dans une galerie.
- ### 👉 URL: http://localhost:3000/upload
- ## 📸 Gestionnaire de Galerie d'Images
- ![333333333135](https://github.com/user-attachments/assets/53518208-7688-42f7-864e-75bd5767632f)
+ ### URL : http://localhost:3000/upload
+ ## Interface de la galerie d'images
+![upload images](https://github.com/user-attachments/assets/b8fe3c6d-d6d1-48a1-ad57-82eded29b928)
+
 
  ## Exercice 3 : Créer une API qui répond en différents formats
  Créez une API qui peut renvoyer des données dans différents formats (JSON, XML, HTML) en fonction de l'en-tête Accept envoyé par le client. Utilisez res.format() pour gérer les différents formats.
-  ### 👉 URL: http://localhost:3000/api/users
+  ### URL : http://localhost:3000/api/users
 
-  ## 🧑‍💻 Affichage des utilisateurs – Format HTML
-  ![htmllllll](https://github.com/user-attachments/assets/ac74052b-7c83-467f-a62a-3b436fee8bf6)
-
-  ## 🔍 Informations utilisateur – Format HTML
-  ![wwwwwwwwww](https://github.com/user-attachments/assets/a1b6402a-b5a6-4f89-a2e3-70e420a180da)
-
-
-
-  ## 📄 Format JSON - Liste des utilisateurs retournée par l’API
-  ![exercice23](https://github.com/user-attachments/assets/2e44e482-7d4c-4ac6-bd8f-2b67e08fe43b)
+  ## Résultat HTML - Liste des utilisateurs
   
-## 🗂️ Liste des utilisateurs – Format XML
-  ![hml](https://github.com/user-attachments/assets/def58ff6-6d75-4b24-b36e-cbe5676ee437)
+  ![users show page](https://github.com/user-attachments/assets/599fc1da-8b41-47ba-b16a-4a5a0b48e7a5)
+
+  ## Résultat HTML - Détail d'utilisateur
+  ![user details](https://github.com/user-attachments/assets/c1f50583-e79c-43e7-8e24-c208958853a4)
+
+
+  ## Résultat JSON
+  ![users-json](https://github.com/user-attachments/assets/fa6f14ae-0516-4aa5-9f76-d03b519318d3)
+
+  
+  ## Résultat XML
+  ![user-xml](https://github.com/user-attachments/assets/bd6ff9dd-5d46-4a77-89cb-2f417071d643)
+
 
 
 
